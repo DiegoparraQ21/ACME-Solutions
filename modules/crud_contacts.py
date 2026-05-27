@@ -2,8 +2,11 @@ import modules.core as cr
 import modules.utils as ut
 import modules.messages as ms
 from tabulate import tabulate
+import re 
 
 def registrar_contacto(contactos):
+
+    tipos_permitidos = ["cliente", "proveedor", "aliado", "personal"]
 
     def pedir_texto(mensaje):
         while True:
@@ -26,17 +29,61 @@ def registrar_contacto(contactos):
                 return int(dato)
 
             print("Debe ingresar solo números.")
+
+    def pedir_id():
+        while True:
+            identificacion = pedir_numero("Ingrese el numero de identificacion o ID interno: ")
+
+            existe = any(
+                contacto["ID"] == identificacion
+                for contacto in contactos["contactos"]
+            )
+
+            if existe:
+                print("Ya existe un contacto con ese ID.")
+            else:
+                return identificacion
+
+    def pedir_email(mensaje):
+        while True:
+            email = input(mensaje).strip().lower()
+            
+            if email == "":
+                print("Este campo es obligatorio")
+                continue
+
+            patron = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+
+            if not re.match(patron, email):
+                print("Ingrese un email valido.")
+                continue
+
+            return email
+        
+    def pedir_tipo_contacto():
+        while True:
+            tipo = input("Ingrese el tipo de contacto: ").strip().lower()
+
+            if tipo == "":
+                print("Este campo es obligatorio.")
+                continue
+
+            if tipo not in tipos_permitidos:
+                print("Tipo invalido. Debe ser: Cliente, Proveedor, Aliado o Personal")
+                continue
+
+            return tipo
             
     ut.borrar_pantalla()
     print("Registrar contacto")
         
-    n_identificacion = pedir_numero("Ingrese el numero de identificacion o ID interno: ")
+    n_identificacion = pedir_id()
     nombres = pedir_texto("Ingrese los nombres: ")
     apellidos = pedir_texto("Ingrese los apellidos: ")
     telefono = pedir_numero("Ingrese el teléfono principal: ")
-    email = pedir_texto("Ingrese el e-mail: ")
+    email = pedir_email("Ingrese el e-mail: ")
     direccion = pedir_texto("Ingrese la direccion: ")
-    tipo = pedir_texto("Ingrese el tipo de contacto: ")
+    tipo = pedir_tipo_contacto()
     notas = pedir_texto("Ingrese notas u observaciones: ")
     
     contacto = {

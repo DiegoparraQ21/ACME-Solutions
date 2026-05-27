@@ -3,6 +3,7 @@ import modules.utils as ut
 import modules.crud_users as cu
 import modules.crud_contacts as cc
 import modules.messages as ms
+import modules.auditoria as au
 
 if __name__ == "__main__":
 
@@ -47,6 +48,9 @@ if __name__ == "__main__":
                     case 9:
                         cu.eliminar_usuario(origin)
                     case 10:
+                        au.auditar_datos(origin)
+                        ut.pausar_pantalla()
+                    case 11:
                         usuario_logueado = cu.cerrar_sesion(origin["usuarios"])
                     case 0:
                         print("Gracias por usar la agenda de contactos. ¡Hasta luego!")

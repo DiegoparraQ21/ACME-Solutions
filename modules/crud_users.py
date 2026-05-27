@@ -2,6 +2,7 @@ import modules.core as cr
 import modules.utils as ut
 import modules.messages as ms
 from tabulate import tabulate
+import re
 
 def iniciar_sesion(usuarios):
     ut.borrar_pantalla()
@@ -52,14 +53,53 @@ def registrar_usuario(usuarios):
 
             print("Debe ingresar solo números.")
 
+    def pedir_id():
+        while True:
+            identificacion = pedir_numero("Ingrese el numero de identificacion o ID interno: ")
+
+            existe = any(
+                usuario["ID"] == identificacion
+                for usuario in usuarios["usuarios"]
+            )
+
+            if existe:
+                print("Ya existe un usuario con ese ID.")
+            else:
+                return identificacion
+
+    def pedir_email(mensaje):
+        while True:
+            email = input(mensaje).strip().lower()
+            
+            if email == "":
+                print("Este campo es obligatorio")
+                continue
+
+            patron = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+
+            if not re.match(patron, email):
+                print("Ingrese un email valido.")
+                continue
+
+            existe = any(
+                usuario["email"] == email
+                for usuario in usuarios["usuarios"]
+            )
+
+            if existe:
+                print("Este email ya esta registrado con otro usuario")
+                continue
+
+            return email
+
     ut.borrar_pantalla()
     print("Registrar usuario al sistema")
 
-    n_identificacion = pedir_numero("Ingrese el numero de identificacion: ")
+    n_identificacion = pedir_id()
     nombres = pedir_texto("Ingrese los nombres: ")
     apellidos = pedir_texto("Ingrese los apellidos: ")
     telefono = pedir_numero("Ingrese el numero de teléfono: ")
-    email = pedir_texto("Ingrese el e-mail corporativo: ")
+    email = pedir_email("Ingrese el e-mail corporativo: ")
     direccion = pedir_texto("Ingrese la direccion: ")
     while True:
         rol = pedir_texto("Ingrese el rol (admin / operario): ")

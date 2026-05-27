@@ -9,7 +9,8 @@ Seleccione la operación a realizar:
 7. Listar usuarios (solo admin)
 8. Actualizar usuario (solo admin)
 9. Eliminar usuario (solo admin)
-10. Cerrar sesion
+10. Auditar datos (solo admin)
+11. Cerrar sesion
 0. Salir
 Ingrese el número de la opción: """
 
